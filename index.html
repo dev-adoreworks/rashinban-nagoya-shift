@@ -4,10 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="robots" content="noindex, nofollow">
-    <title>シフトスケジュール</title>
+    <title>出演スケジュール | 羅心盤 名古屋栄店</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=Shippori+Mincho:wght@400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Shippori+Mincho:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
             --bg-color: #E9E6DF;
@@ -17,10 +17,9 @@
             --accent-gold-light: #F4F1EA;
             --card-bg: #FFFFFF;
             --border-color: #D6D0C5;
-            --sunday-color: #C86D63;
-            --sunday-bg: #FDF4F3;
-            --saturday-color: #5B7A94;
-            --saturday-bg: #F3F6F9;
+            /* 土日のカラー：赤青を使わず、ゴールドを薄くした上品なトーンに変更 */
+            --weekend-color: #8C7861;
+            --weekend-bg: #F5F3EE;
         }
 
         * {
@@ -34,14 +33,14 @@
             background-color: var(--bg-color);
             color: var(--text-color);
             font-family: 'Shippori Mincho', serif;
-            font-weight: 400;
-            line-height: 1.6;
-            letter-spacing: 0.05em;
+            font-weight: 500; /* 老眼の方でも見やすいよう少しウェイトをアップ */
+            line-height: 1.7;
+            letter-spacing: 0.06em;
             padding-bottom: 40px;
         }
 
         header {
-            padding: 32px 20px 20px;
+            padding: 36px 20px 24px;
             text-align: center;
             background-color: var(--bg-color);
             border-bottom: 1px solid var(--border-color);
@@ -50,75 +49,45 @@
         .store-badge {
             display: inline-block;
             font-family: 'Cormorant Garamond', serif;
-            font-size: 0.75rem;
-            letter-spacing: 0.2em;
+            font-size: 0.85rem;
+            letter-spacing: 0.25em;
             color: var(--accent-gold);
             border: 1px solid var(--accent-gold);
-            padding: 3px 12px;
-            margin-bottom: 10px;
+            padding: 4px 14px;
+            margin-bottom: 12px;
             text-transform: uppercase;
         }
 
         h1 {
-            font-size: 1.25rem;
-            font-weight: 500;
+            font-size: 1.4rem;
+            font-weight: 600;
             letter-spacing: 0.15em;
-            color: var(--text-color);
-            margin-bottom: 4px;
+            color: var(--accent-gold);
+            margin-bottom: 6px;
         }
 
         .subtitle {
             font-family: 'Cormorant Garamond', serif;
-            font-size: 0.9rem;
+            font-size: 1rem;
             color: var(--text-light);
             letter-spacing: 0.1em;
         }
 
         .container {
             max-width: 100%;
-            padding: 16px 12px;
-        }
-
-        .filter-section {
-            display: flex;
-            gap: 6px;
-            overflow-x: auto;
-            padding-bottom: 12px;
-            margin-bottom: 16px;
-            scrollbar-width: none;
-        }
-        .filter-section::-webkit-scrollbar {
-            display: none;
-        }
-
-        .filter-btn {
-            background: var(--card-bg);
-            border: 1px solid var(--border-color);
-            color: var(--text-color);
-            padding: 7px 14px;
-            font-family: 'Shippori Mincho', serif;
-            font-size: 0.8rem;
-            white-space: nowrap;
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-
-        .filter-btn.active {
-            background-color: var(--accent-gold);
-            color: #FFFFFF;
-            border-color: var(--accent-gold);
+            padding: 20px 12px;
         }
 
         .table-card {
             background: var(--card-bg);
             border: 1px solid var(--border-color);
-            box-shadow: 0 2px 8px rgba(43, 36, 30, 0.03);
+            box-shadow: 0 4px 12px rgba(43, 36, 30, 0.04);
             overflow: hidden;
             margin-bottom: 20px;
         }
 
         .table-header-info {
-            padding: 14px 16px;
+            padding: 16px 20px;
             border-bottom: 1px solid var(--border-color);
             display: flex;
             justify-content: space-between;
@@ -127,16 +96,17 @@
         }
 
         .table-title {
-            font-size: 0.95rem;
-            font-weight: 500;
+            font-size: 1.05rem;
+            font-weight: 600;
             letter-spacing: 0.1em;
+            color: var(--accent-gold);
         }
 
         .month-display {
             font-family: 'Cormorant Garamond', serif;
-            font-size: 1.1rem;
+            font-size: 1.25rem;
             color: var(--accent-gold);
-            font-weight: 500;
+            font-weight: 600;
         }
 
         .table-responsive {
@@ -150,12 +120,12 @@
             border-collapse: collapse;
             text-align: center;
             white-space: nowrap;
-            font-size: 0.8rem;
+            font-size: 0.9rem; /* 視認性を上げるため文字サイズを少し拡大 */
         }
 
         th, td {
             border: 1px solid var(--border-color);
-            padding: 8px 4px;
+            padding: 12px 8px; /* タップしやすくするため高さを確保 */
             vertical-align: middle;
         }
 
@@ -164,13 +134,17 @@
             left: 0;
             background-color: var(--card-bg);
             z-index: 2;
-            min-width: 105px;
-            max-width: 105px;
+            min-width: 120px;
+            max-width: 120px;
             text-align: left;
-            padding-left: 10px;
-            font-weight: 500;
+            padding-left: 12px;
+            font-weight: 600;
             overflow: hidden;
             text-overflow: ellipsis;
+        }
+
+        td.staff-col {
+            color: var(--accent-gold);
         }
 
         th.staff-col {
@@ -178,72 +152,68 @@
             color: #FFFFFF;
             z-index: 3;
             border-color: var(--accent-gold);
+            font-size: 0.95rem;
         }
 
         th.date-th {
             background-color: var(--accent-gold);
             color: #FFFFFF;
-            font-weight: 400;
-            min-width: 38px;
+            font-weight: 500;
+            min-width: 48px;
             border-color: var(--accent-gold);
         }
 
-        th.date-th.sun {
-            background-color: #B85B52;
-        }
-
-        th.date-th.sat {
-            background-color: #4A6782;
+        /* 土日のヘッダー：薄いゴールドトーン */
+        th.date-th.weekend {
+            background-color: #8C7861;
         }
 
         .date-num {
             font-family: 'Cormorant Garamond', serif;
-            font-size: 0.9rem;
+            font-size: 1.05rem;
+            font-weight: 600;
             display: block;
-            line-height: 1.1;
+            line-height: 1.2;
         }
 
         .date-day {
-            font-size: 0.65rem;
+            font-size: 0.75rem;
             display: block;
-            opacity: 0.9;
+            opacity: 0.95;
         }
 
-        td.sun-cell {
-            background-color: var(--sunday-bg);
-            color: var(--sunday-color);
-        }
-
-        td.sat-cell {
-            background-color: var(--saturday-bg);
-            color: var(--saturday-color);
+        /* 土日のセル：薄いゴールドベージュ */
+        td.weekend-cell {
+            background-color: var(--weekend-bg);
+            color: var(--weekend-color);
         }
 
         .shift-mark {
             font-family: 'Cormorant Garamond', serif;
-            font-size: 0.9rem;
-            font-weight: 500;
+            font-size: 1.1rem;
+            font-weight: 600;
             color: var(--accent-gold);
         }
 
         .shift-time {
-            font-size: 0.65rem;
-            line-height: 1.2;
+            font-size: 0.75rem;
+            line-height: 1.3;
             display: block;
             color: var(--text-color);
             font-family: 'Cormorant Garamond', serif;
+            font-weight: 600;
         }
 
         .shift-off {
-            color: #CCC6BD;
-            font-size: 0.75rem;
+            color: #B5AEA4;
+            font-size: 0.85rem;
         }
 
         footer {
             text-align: center;
-            font-size: 0.7rem;
+            font-size: 0.75rem;
             color: var(--text-light);
-            margin-top: 24px;
+            margin-top: 30px;
             letter-spacing: 0.1em;
         }
     </style>
@@ -257,8 +227,6 @@
     </header>
 
     <div class="container">
-        <div class="filter-section" id="filter-tabs"></div>
-
         <div class="table-card">
             <div class="table-header-info">
                 <span class="table-title">シフト一覧</span>
@@ -285,11 +253,11 @@
         // shift
         const GAS_API_URL = "https://script.google.com/macros/s/AKfycbwu3A4mKCh9FucYJ7AKbokUCrZlLevAnwFIGtUJyL2soC2Eh_2UcxPycSQSmOv2c1nu/exec";
 
+
         let STAFF_LIST = [];
 
         async function fetchShiftData() {
             try {
-                // スプレッドシートのタブ名（例: 11月）を指定してデータを取得
                 const response = await fetch(`${GAS_API_URL}?month=${MONTH}月`);
                 STAFF_LIST = await response.json();
                 renderApp();
@@ -297,8 +265,6 @@
                 console.error("シフトデータの取得に失敗しました", error);
             }
         }
-
-        let currentFilter = "all";
 
         function getDaysInMonth(year, month) {
             return new Date(year, month, 0).getDate();
@@ -320,35 +286,29 @@
             document.getElementById('footer-text').innerHTML = `&copy; 羅心盤 ${STORE_NAME}`;
 
             const daysCount = getDaysInMonth(YEAR, MONTH);
-            
-            const tabsContainer = document.getElementById('filter-tabs');
-            tabsContainer.innerHTML = `<button class="filter-btn ${currentFilter === 'all' ? 'active' : ''}" onclick="setFilter('all')">全員</button>`;
-            STAFF_LIST.forEach(staff => {
-                const activeClass = currentFilter === staff.name ? 'active' : '';
-                tabsContainer.innerHTML += `<button class="filter-btn ${activeClass}" onclick="setFilter('${staff.name}')">${staff.name}</button>`;
-            });
-
             const table = document.getElementById('shift-table');
+            
             let headerHtml = '<thead><tr><th class="staff-col">占い師</th>';
             for (let d = 1; d <= daysCount; d++) {
                 const dayInfo = getDayOfWeek(YEAR, MONTH, d);
                 let thClass = 'date-th';
-                if (dayInfo.dayIndex === 0) thClass += ' sun';
-                if (dayInfo.dayIndex === 6) thClass += ' sat';
+                // 土曜(6)または日曜(0)の場合
+                if (dayInfo.dayIndex === 0 || dayInfo.dayIndex === 6) {
+                    thClass += ' weekend';
+                }
                 headerHtml += `<th class="${thClass}"><span class="date-num">${d}</span><span class="date-day">(${dayInfo.dayName})</span></th>`;
             }
             headerHtml += '</tr></thead>';
 
             let bodyHtml = '<tbody>';
-            const filteredStaff = currentFilter === 'all' ? STAFF_LIST : STAFF_LIST.filter(s => s.name === currentFilter);
-
-            filteredStaff.forEach(staff => {
+            STAFF_LIST.forEach(staff => {
                 bodyHtml += `<tr><td class="staff-col">${staff.name}</td>`;
                 for (let d = 1; d <= daysCount; d++) {
                     const dayInfo = getDayOfWeek(YEAR, MONTH, d);
                     let tdClass = '';
-                    if (dayInfo.dayIndex === 0) tdClass = 'sun-cell';
-                    if (dayInfo.dayIndex === 6) tdClass = 'sat-cell';
+                    if (dayInfo.dayIndex === 0 || dayInfo.dayIndex === 6) {
+                        tdClass = 'weekend-cell';
+                    }
 
                     const matchedDay = staff.days.find(item => {
                         return Number(item.day) === d;
@@ -369,11 +329,6 @@
             bodyHtml += '</tbody>';
 
             table.innerHTML = headerHtml + bodyHtml;
-        }
-
-        function setFilter(staffName) {
-            currentFilter = staffName;
-            renderApp();
         }
 
         // 起動時にスプレッドシートからデータを取得
