@@ -278,10 +278,7 @@
                     <span class="table-title">シフト一覧</span>
                     <span class="month-display" id="month-title"></span>
                 </div>
-                <div class="month-nav">
-                    <button class="month-tab active" data-month="11" onclick="switchMonth(11)">11月</button>
-                    <button class="month-tab" data-month="12" onclick="switchMonth(12)">12月</button>
-                </div>
+                <div class="month-nav" id="month-tabs"></div>
             </div>
             <div class="table-responsive">
                 <table id="shift-table"></table>
@@ -295,41 +292,56 @@
 
     <script>
         // ==========================================
-        // 【設定エリア】スプレッドシート連携版
+        // 【設定エリア】表示したい年月を指定
         // ==========================================
         const STORE_NAME = "名古屋栄店";
-        const YEAR = 2026;
-        let currentMonth = 11; // 初期表示月
+
+        // 表示したい年月のリスト（年跨ぎも自動対応！）
+        // 1月を見せたいときは、ここに { year: 2027, month: 1 } を追加（または入れ替え）するだけでOK
+        const TARGET_MONTHS = [
+            { year: 2026, month: 11 },
+            { year: 2026, month: 12 }
+        ];
+
+        // 初期表示する年月（リストの最初の月）
+        let currentTarget = TARGET_MONTHS[0];
 
         // shift
         const GAS_API_URL = "https://script.google.com/macros/s/AKfycbwu3A4mKCh9FucYJ7AKbokUCrZlLevAnwFIGtUJyL2soC2Eh_2UcxPycSQSmOv2c1nu/exec";
 
         let STAFF_LIST = [];
 
-        function switchMonth(month) {
-            if (currentMonth === month && STAFF_LIST.length > 0) return;
-            currentMonth = month;
-            updateMonthButtons();
-            fetchShiftData();
+        // 月切り替えタブボタンの動的生成
+        function renderMonthTabs() {
+            const container = document.getElementById('month-tabs');
+            container.innerHTML = '';
+            TARGET_MONTHS.forEach(target => {
+                const btn = document.createElement('button');
+                btn.className = 'month-tab';
+                if (target.year === currentTarget.year && target.month === currentTarget.month) {
+                    btn.classList.add('active');
+                }
+                btn.textContent = `${target.month}月`;
+                btn.onclick = () => switchMonth(target);
+                container.appendChild(btn);
+            });
         }
 
-        function updateMonthButtons() {
-            document.querySelectorAll('.month-tab').forEach(btn => {
-                if (Number(btn.dataset.month) === currentMonth) {
-                    btn.classList.add('active');
-                } else {
-                    btn.classList.remove('active');
-                }
-            });
+        function switchMonth(target) {
+            if (currentTarget.year === target.year && currentTarget.month === target.month && STAFF_LIST.length > 0) return;
+            currentTarget = target;
+            renderMonthTabs();
+            fetchShiftData();
         }
 
         async function fetchShiftData() {
             const table = document.getElementById('shift-table');
-            document.getElementById('month-title').textContent = `${YEAR}年${currentMonth}月`;
+            document.getElementById('month-title').textContent = `${currentTarget.year}年${currentTarget.month}月`;
             table.innerHTML = '<tbody><tr><td style="padding: 36px 20px; color: var(--text-light); text-align: center;">シフトデータを読み込み中...</td></tr></tbody>';
 
             try {
-                const response = await fetch(`${GAS_API_URL}?month=${encodeURIComponent(currentMonth + '月')}`);
+                // スプレッドシートのタブ名（例: 11月, 12月, 1月）
+                const response = await fetch(`${GAS_API_URL}?month=${encodeURIComponent(currentTarget.month + '月')}`);
                 STAFF_LIST = await response.json();
                 renderApp();
             } catch (error) {
@@ -352,15 +364,15 @@
         }
 
         function renderApp() {
-            document.getElementById('month-title').textContent = `${YEAR}年${currentMonth}月`;
+            document.getElementById('month-title').textContent = `${currentTarget.year}年${currentTarget.month}月`;
             document.getElementById('footer-text').innerHTML = `&copy; 羅心盤 ${STORE_NAME}`;
 
-            const daysCount = getDaysInMonth(YEAR, currentMonth);
+            const daysCount = getDaysInMonth(currentTarget.year, currentTarget.month);
             const table = document.getElementById('shift-table');
             
             let headerHtml = '<thead><tr><th class="staff-col">占い師</th>';
             for (let d = 1; d <= daysCount; d++) {
-                const dayInfo = getDayOfWeek(YEAR, currentMonth, d);
+                const dayInfo = getDayOfWeek(currentTarget.year, currentTarget.month, d);
                 let thClass = 'date-th';
                 // 土曜(6)または日曜(0)の場合
                 if (dayInfo.dayIndex === 0 || dayInfo.dayIndex === 6) {
@@ -374,7 +386,7 @@
             STAFF_LIST.forEach(staff => {
                 bodyHtml += `<tr><td class="staff-col">${staff.name}</td>`;
                 for (let d = 1; d <= daysCount; d++) {
-                    const dayInfo = getDayOfWeek(YEAR, currentMonth, d);
+                    const dayInfo = getDayOfWeek(currentTarget.year, currentTarget.month, d);
                     let tdClass = '';
                     if (dayInfo.dayIndex === 0 || dayInfo.dayIndex === 6) {
                         tdClass = 'weekend-cell';
@@ -401,7 +413,8 @@
             table.innerHTML = headerHtml + bodyHtml;
         }
 
-        // 起動時に初期月（11月）のデータを取得
+        // 起動処理
+        renderMonthTabs();
         fetchShiftData();
     </script>
 </body>
